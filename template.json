@@ -1,0 +1,245 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "virtualMachines_3dstreaming_turn_name": {
+            "defaultValue": "3dstreaming-turn",
+            "type": "String"
+        },
+        "networkInterfaces_3dstreaming_turn659_name": {
+            "defaultValue": "3dstreaming-turn659",
+            "type": "String"
+        },
+        "networkSecurityGroups_3dstreaming_turn_nsg_name": {
+            "defaultValue": "3dstreaming-turn-nsg",
+            "type": "String"
+        },
+        "publicIPAddresses_3dstreaming_turn_ip_name": {
+            "defaultValue": "3dstreaming-turn-ip",
+            "type": "String"
+        },
+        "virtualNetworks_3dstreaming_turn_name": {
+            "defaultValue": "3dstreaming-turn",
+            "type": "String"
+        },
+        "storageAccounts_3dstreamingturndiag747_name": {
+            "defaultValue": "3dstreamingturndiag747",
+            "type": "String"
+        },
+        "storageAccounts_3dstreamingturndisks541_name": {
+            "defaultValue": "3dstreamingturndisks541",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "comments": "Generalized from resource: '/subscriptions/04f7ec88-8e28-41ed-8537-5e17766001f5/resourceGroups/3dstreaming-turn/providers/Microsoft.Compute/virtualMachines/3dstreaming-turn'.",
+            "type": "Microsoft.Compute/virtualMachines",
+            "name": "[parameters('virtualMachines_3dstreaming_turn_name')]",
+            "apiVersion": "2016-04-30-preview",
+            "location": "centralus",
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "Standard_DS1_v2"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "Canonical",
+                        "offer": "UbuntuServer",
+                        "sku": "16.04-LTS",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "osType": "Linux",
+                        "name": "[parameters('virtualMachines_3dstreaming_turn_name')]",
+                        "createOption": "FromImage",
+                        "vhd": {
+                            "uri": "[concat('https', '://', parameters('storageAccounts_3dstreamingturndisks541_name'), '.blob.core.windows.net', concat('/vhds/', parameters('virtualMachines_3dstreaming_turn_name'),'20170414132350.vhd'))]"
+                        },
+                        "caching": "ReadWrite"
+                    },
+                    "dataDisks": []
+                },
+                "osProfile": {
+                    "computerName": "[parameters('virtualMachines_3dstreaming_turn_name')]",
+                    "adminUsername": "user0317",
+                    "linuxConfiguration": {
+                        "disablePasswordAuthentication": false
+                    },
+                    "adminPassword": "3Dstreaming0317"
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_3dstreaming_turn659_name'))]"
+                        }
+                    ]
+                },
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": true,
+                        "storageUri": "[concat('https', '://', parameters('storageAccounts_3dstreamingturndiag747_name'), '.blob.core.windows.net', '/')]"
+                    }
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_3dstreamingturndisks541_name'))]",
+                "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_3dstreaming_turn659_name'))]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_3dstreamingturndiag747_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/04f7ec88-8e28-41ed-8537-5e17766001f5/resourceGroups/3dstreaming-turn/providers/Microsoft.Network/networkInterfaces/3dstreaming-turn659'.",
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "[parameters('networkInterfaces_3dstreaming_turn659_name')]",
+            "apiVersion": "2016-03-30",
+            "location": "centralus",
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "privateIPAddress": "10.0.0.4",
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_3dstreaming_turn_ip_name'))]"
+                            },
+                            "subnet": {
+                                "id": "[concat(resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_3dstreaming_turn_name')), '/subnets/default')]"
+                            }
+                        }
+                    }
+                ],
+                "dnsSettings": {
+                    "dnsServers": []
+                },
+                "enableIPForwarding": false,
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_3dstreaming_turn_nsg_name'))]"
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_3dstreaming_turn_ip_name'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_3dstreaming_turn_name'))]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_3dstreaming_turn_nsg_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/04f7ec88-8e28-41ed-8537-5e17766001f5/resourceGroups/3dstreaming-turn/providers/Microsoft.Network/networkSecurityGroups/3dstreaming-turn-nsg'.",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "name": "[parameters('networkSecurityGroups_3dstreaming_turn_nsg_name')]",
+            "apiVersion": "2016-03-30",
+            "location": "centralus",
+            "properties": {
+                "securityRules": [
+                    {
+                        "name": "default-allow-ssh",
+                        "properties": {
+                            "protocol": "TCP",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "22",
+                            "sourceAddressPrefix": "131.107.0.0/24",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 1000,
+                            "direction": "Inbound"
+                        }
+                    },
+                    {
+                        "name": "AllowIn3478",
+                        "properties": {
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "3478",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 1010,
+                            "direction": "Inbound"
+                        }
+                    },
+                    {
+                        "name": "allow-ssh",
+                        "properties": {
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "22",
+                            "sourceAddressPrefix": "167.220.0.0/16",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 1020,
+                            "direction": "Inbound"
+                        }
+                    }
+                ]
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/04f7ec88-8e28-41ed-8537-5e17766001f5/resourceGroups/3dstreaming-turn/providers/Microsoft.Network/publicIPAddresses/3dstreaming-turn-ip'.",
+            "type": "Microsoft.Network/publicIPAddresses",
+            "name": "[parameters('publicIPAddresses_3dstreaming_turn_ip_name')]",
+            "apiVersion": "2016-03-30",
+            "location": "centralus",
+            "properties": {
+                "publicIPAllocationMethod": "Dynamic",
+                "idleTimeoutInMinutes": 4
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/04f7ec88-8e28-41ed-8537-5e17766001f5/resourceGroups/3dstreaming-turn/providers/Microsoft.Network/virtualNetworks/3dstreaming-turn'.",
+            "type": "Microsoft.Network/virtualNetworks",
+            "name": "[parameters('virtualNetworks_3dstreaming_turn_name')]",
+            "apiVersion": "2016-03-30",
+            "location": "centralus",
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "10.0.0.0/24"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "default",
+                        "properties": {
+                            "addressPrefix": "10.0.0.0/24"
+                        }
+                    }
+                ]
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/04f7ec88-8e28-41ed-8537-5e17766001f5/resourceGroups/3dstreaming-turn/providers/Microsoft.Storage/storageAccounts/3dstreamingturndiag747'.",
+            "type": "Microsoft.Storage/storageAccounts",
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "kind": "Storage",
+            "name": "[parameters('storageAccounts_3dstreamingturndiag747_name')]",
+            "apiVersion": "2016-01-01",
+            "location": "centralus",
+            "tags": {},
+            "properties": {},
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/04f7ec88-8e28-41ed-8537-5e17766001f5/resourceGroups/3dstreaming-turn/providers/Microsoft.Storage/storageAccounts/3dstreamingturndisks541'.",
+            "type": "Microsoft.Storage/storageAccounts",
+            "sku": {
+                "name": "Premium_LRS",
+                "tier": "Premium"
+            },
+            "kind": "Storage",
+            "name": "[parameters('storageAccounts_3dstreamingturndisks541_name')]",
+            "apiVersion": "2016-01-01",
+            "location": "centralus",
+            "tags": {},
+            "properties": {},
+            "dependsOn": []
+        }
+    ]
+}
