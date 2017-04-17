@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "virtualMachines_3dstreaming_turn_name": {
-            "defaultValue": "3dstreaming-turn",
+            "defaultValue": "",
             "type": "String"
         },
         "networkInterfaces_3dstreaming_turn659_name": {
@@ -23,11 +23,11 @@
             "type": "String"
         },
         "storageAccounts_3dstreamingturndiag747_name": {
-            "defaultValue": "3dstreamingturndiag747",
+            "defaultValue": "",
             "type": "String"
         },
         "storageAccounts_3dstreamingturndisks541_name": {
-            "defaultValue": "3dstreamingturndisks541",
+            "defaultValue": "",
             "type": "String"
         }
     },
