@@ -13,8 +13,8 @@
         "networkSecurityGroup_nsg_name": "[concat(parameters('prefix'), '-SecurityGroups_nsg')]",
         "publicIPAddress_ip_name": "[concat(parameters('prefix'), '-publicIPAddress')]",
         "virtualNetwork_name": "[concat(parameters('prefix'), '-virtualNetwork')]",
-        "storageAccount1_name": "[concat(parameters('prefix'), '-storageAccount1')]",
-        "storageAccount2_name": "[concat(parameters('prefix'), '-storageAccount2')]"
+        "storageAccount1_name": "[concat(parameters('prefix'), '-storage1')]",
+        "storageAccount2_name": "[concat(parameters('prefix'), '-storage2')]"
     },
     "resources": [
         {
