@@ -2,9 +2,33 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-         "prefix": {
+        "prefix": {
             "defaultValue": "",
-            "type": "String"
+            "type": "string"
+        },
+        "adminUsername": {
+            "type": "string",
+            "metadata": {
+                "description": "Admin username for connecting to VMs."
+            }
+        },
+        "sshPublicKey": {
+            "type": "string",
+            "metadata": {
+                "description": "ssh public key for connecting to VMs."
+            }
+        },
+        "turnServerUsername": {
+            "type": "string",
+            "metadata": {
+                "description": "Userrname for TURN server user"
+            }
+        },
+        "turnServerPassword": {
+            "type": "string",
+            "metadata": {
+                "description": "Password for TURN server user"
+            }
         }
     },
     "variables": {
@@ -47,11 +71,18 @@
                 },
                 "osProfile": {
                     "computerName": "[variables('virtualMachine_name')]",
-                    "adminUsername": "user0317",
+                    "adminUsername": "[parameters('adminUsername')]",
                     "linuxConfiguration": {
-                        "disablePasswordAuthentication": false
+                        "disablePasswordAuthentication": true,
+                        "ssh": {
+                            "publicKeys": [
+                                    {
+                                    "keyData": "[parameters('sshPublicKey')]"
+                                    }
+                                ]
+                            }
                     },
-                    "adminPassword": "3Dstreaming0317"
+                    "adminPassword": ""
                 },
                 "networkProfile": {
                     "networkInterfaces": [
