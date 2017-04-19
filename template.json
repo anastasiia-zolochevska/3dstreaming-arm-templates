@@ -21,7 +21,7 @@
         "turnServerUsername": {
             "type": "string",
             "metadata": {
-                "description": "Userrname for TURN server user"
+                "description": "Username for TURN server user"
             }
         },
         "turnServerPassword": {
