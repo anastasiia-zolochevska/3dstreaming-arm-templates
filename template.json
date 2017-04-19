@@ -2,41 +2,25 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "virtualMachines_3dstreaming_turn_name": {
-            "defaultValue": "",
-            "type": "String"
-        },
-        "networkInterfaces_3dstreaming_turn659_name": {
-            "defaultValue": "3dstreaming-turn659",
-            "type": "String"
-        },
-        "networkSecurityGroups_3dstreaming_turn_nsg_name": {
-            "defaultValue": "3dstreaming-turn-nsg",
-            "type": "String"
-        },
-        "publicIPAddresses_3dstreaming_turn_ip_name": {
-            "defaultValue": "3dstreaming-turn-ip",
-            "type": "String"
-        },
-        "virtualNetworks_3dstreaming_turn_name": {
-            "defaultValue": "3dstreaming-turn",
-            "type": "String"
-        },
-        "storageAccounts_3dstreamingturndiag747_name": {
-            "defaultValue": "",
-            "type": "String"
-        },
-        "storageAccounts_3dstreamingturndisks541_name": {
+         "prefix": {
             "defaultValue": "",
             "type": "String"
         }
     },
-    "variables": {},
+    "variables": {
+        "virtualMachine_name": "[concat(parameters('prefix'), '-turn-server-vm')]",
+        "networkInterface_name": "[concat(parameters('prefix'), '-networkInterface')]",
+        "networkSecurityGroup_nsg_name": "[concat(parameters('prefix'), '-SecurityGroups_nsg')]",
+        "publicIPAddress_ip_name": "[concat(parameters('prefix'), '-publicIPAddress')]",
+        "virtualNetwork_name": "[concat(parameters('prefix'), '-virtualNetwork')]",
+        "storageAccount1_name": "[concat(parameters('prefix'), '-storageAccount1')]",
+        "storageAccount2_name": "[concat(parameters('prefix'), '-storageAccount2')]"
+    },
     "resources": [
         {
             "comments": "Generalized from resource: '/subscriptions/04f7ec88-8e28-41ed-8537-5e17766001f5/resourceGroups/3dstreaming-turn/providers/Microsoft.Compute/virtualMachines/3dstreaming-turn'.",
             "type": "Microsoft.Compute/virtualMachines",
-            "name": "[parameters('virtualMachines_3dstreaming_turn_name')]",
+            "name": "[variables('virtualMachine_name')]",
             "apiVersion": "2016-04-30-preview",
             "location": "centralus",
             "properties": {
@@ -52,17 +36,17 @@
                     },
                     "osDisk": {
                         "osType": "Linux",
-                        "name": "[parameters('virtualMachines_3dstreaming_turn_name')]",
+                        "name": "[variables('virtualMachine_name')]",
                         "createOption": "FromImage",
                         "vhd": {
-                            "uri": "[concat('https', '://', parameters('storageAccounts_3dstreamingturndisks541_name'), '.blob.core.windows.net', concat('/vhds/', parameters('virtualMachines_3dstreaming_turn_name'),'20170414132350.vhd'))]"
+                            "uri": "[concat('https', '://', variables('storageAccount2_name'), '.blob.core.windows.net', concat('/vhds/', variables('virtualMachine_name'),'20170414132350.vhd'))]"
                         },
                         "caching": "ReadWrite"
                     },
                     "dataDisks": []
                 },
                 "osProfile": {
-                    "computerName": "[parameters('virtualMachines_3dstreaming_turn_name')]",
+                    "computerName": "[variables('virtualMachine_name')]",
                     "adminUsername": "user0317",
                     "linuxConfiguration": {
                         "disablePasswordAuthentication": false
@@ -72,27 +56,27 @@
                 "networkProfile": {
                     "networkInterfaces": [
                         {
-                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_3dstreaming_turn659_name'))]"
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('networkInterface_name'))]"
                         }
                     ]
                 },
                 "diagnosticsProfile": {
                     "bootDiagnostics": {
                         "enabled": true,
-                        "storageUri": "[concat('https', '://', parameters('storageAccounts_3dstreamingturndiag747_name'), '.blob.core.windows.net', '/')]"
+                        "storageUri": "[concat('https', '://', variables('storageAccount1_name'), '.blob.core.windows.net', '/')]"
                     }
                 }
             },
             "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_3dstreamingturndisks541_name'))]",
-                "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_3dstreaming_turn659_name'))]",
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_3dstreamingturndiag747_name'))]"
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccount2_name'))]",
+                "[resourceId('Microsoft.Network/networkInterfaces', variables('networkInterface_name'))]",
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccount1_name'))]"
             ]
         },
         {
             "comments": "Generalized from resource: '/subscriptions/04f7ec88-8e28-41ed-8537-5e17766001f5/resourceGroups/3dstreaming-turn/providers/Microsoft.Network/networkInterfaces/3dstreaming-turn659'.",
             "type": "Microsoft.Network/networkInterfaces",
-            "name": "[parameters('networkInterfaces_3dstreaming_turn659_name')]",
+            "name": "[variables('networkInterface_name')]",
             "apiVersion": "2016-03-30",
             "location": "centralus",
             "properties": {
@@ -103,10 +87,10 @@
                             "privateIPAddress": "10.0.0.4",
                             "privateIPAllocationMethod": "Dynamic",
                             "publicIPAddress": {
-                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_3dstreaming_turn_ip_name'))]"
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPAddress_ip_name'))]"
                             },
                             "subnet": {
-                                "id": "[concat(resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_3dstreaming_turn_name')), '/subnets/default')]"
+                                "id": "[concat(resourceId('Microsoft.Network/virtualNetworks', variables('virtualNetwork_name')), '/subnets/default')]"
                             }
                         }
                     }
@@ -116,19 +100,19 @@
                 },
                 "enableIPForwarding": false,
                 "networkSecurityGroup": {
-                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_3dstreaming_turn_nsg_name'))]"
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroup_nsg_name'))]"
                 }
             },
             "dependsOn": [
-                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_3dstreaming_turn_ip_name'))]",
-                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_3dstreaming_turn_name'))]",
-                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_3dstreaming_turn_nsg_name'))]"
+                "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPAddress_ip_name'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('virtualNetwork_name'))]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroup_nsg_name'))]"
             ]
         },
         {
             "comments": "Generalized from resource: '/subscriptions/04f7ec88-8e28-41ed-8537-5e17766001f5/resourceGroups/3dstreaming-turn/providers/Microsoft.Network/networkSecurityGroups/3dstreaming-turn-nsg'.",
             "type": "Microsoft.Network/networkSecurityGroups",
-            "name": "[parameters('networkSecurityGroups_3dstreaming_turn_nsg_name')]",
+            "name": "[variables('networkSecurityGroup_nsg_name')]",
             "apiVersion": "2016-03-30",
             "location": "centralus",
             "properties": {
@@ -179,7 +163,7 @@
         {
             "comments": "Generalized from resource: '/subscriptions/04f7ec88-8e28-41ed-8537-5e17766001f5/resourceGroups/3dstreaming-turn/providers/Microsoft.Network/publicIPAddresses/3dstreaming-turn-ip'.",
             "type": "Microsoft.Network/publicIPAddresses",
-            "name": "[parameters('publicIPAddresses_3dstreaming_turn_ip_name')]",
+            "name": "[variables('publicIPAddress_ip_name')]",
             "apiVersion": "2016-03-30",
             "location": "centralus",
             "properties": {
@@ -191,7 +175,7 @@
         {
             "comments": "Generalized from resource: '/subscriptions/04f7ec88-8e28-41ed-8537-5e17766001f5/resourceGroups/3dstreaming-turn/providers/Microsoft.Network/virtualNetworks/3dstreaming-turn'.",
             "type": "Microsoft.Network/virtualNetworks",
-            "name": "[parameters('virtualNetworks_3dstreaming_turn_name')]",
+            "name": "[variables('virtualNetwork_name')]",
             "apiVersion": "2016-03-30",
             "location": "centralus",
             "properties": {
@@ -219,7 +203,7 @@
                 "tier": "Standard"
             },
             "kind": "Storage",
-            "name": "[parameters('storageAccounts_3dstreamingturndiag747_name')]",
+            "name": "[variables('storageAccount1_name')]",
             "apiVersion": "2016-01-01",
             "location": "centralus",
             "tags": {},
@@ -234,7 +218,7 @@
                 "tier": "Premium"
             },
             "kind": "Storage",
-            "name": "[parameters('storageAccounts_3dstreamingturndisks541_name')]",
+            "name": "[variables('storageAccount2_name')]",
             "apiVersion": "2016-01-01",
             "location": "centralus",
             "tags": {},
