@@ -14,4 +14,4 @@ RUN apt-get update
 RUN apt-get -y install dnsutils
 RUN apt-get -y install coturn
 
-CMD ["bash", "deploy-turnserver.sh"]                                
+ENTRYPOINT ["bash", "deploy-turnserver.sh"]                                

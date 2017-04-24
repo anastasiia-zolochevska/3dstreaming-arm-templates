@@ -19,18 +19,6 @@
             "metadata": {
                 "description": "ssh public key for connecting to VMs."
             }
-        },
-        "turnServerUsername": {
-            "type": "string",
-            "metadata": {
-                "description": "Username for TURN server user"
-            }
-        },
-        "turnServerPassword": {
-            "type": "string",
-            "metadata": {
-                "description": "Password for TURN server user"
-            }
         }
     },
     "variables": {
