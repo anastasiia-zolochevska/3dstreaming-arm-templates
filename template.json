@@ -29,6 +29,8 @@
         "virtualNetwork_name": "[concat(parameters('prefix'), '-virtualNetwork')]",
         "storageAccount1_name": "[concat(parameters('prefix'), 'storage1')]",
         "storageAccount2_name": "[concat(parameters('prefix'), 'storage2')]",
+        "dockerExtention_name": "DockerExtension",
+        "location": "centralus",
         "sshKeyPath": "[concat('/home/',parameters('username'),'/.ssh/authorized_keys')]"
     },
     "resources": [
@@ -37,7 +39,7 @@
             "type": "Microsoft.Compute/virtualMachines",
             "name": "[variables('virtualMachine_name')]",
             "apiVersion": "2016-04-30-preview",
-            "location": "centralus",
+            "location": "[variables('location')]",
             "properties": {
                 "hardwareProfile": {
                     "vmSize": "Standard_DS1_v2"
@@ -100,7 +102,7 @@
             "type": "Microsoft.Network/networkInterfaces",
             "name": "[variables('networkInterface_name')]",
             "apiVersion": "2016-03-30",
-            "location": "centralus",
+            "location": "[variables('location')]",
             "properties": {
                 "ipConfigurations": [
                     {
@@ -136,7 +138,7 @@
             "type": "Microsoft.Network/networkSecurityGroups",
             "name": "[variables('networkSecurityGroup_nsg_name')]",
             "apiVersion": "2016-03-30",
-            "location": "centralus",
+            "location": "[variables('location')]",
             "properties": {
                 "securityRules": [
                     {
@@ -145,7 +147,7 @@
                             "protocol": "TCP",
                             "sourcePortRange": "*",
                             "destinationPortRange": "22",
-                            "sourceAddressPrefix": "131.107.0.0/24",
+                            "sourceAddressPrefix": "*",
                             "destinationAddressPrefix": "*",
                             "access": "Allow",
                             "priority": 1000,
@@ -164,19 +166,6 @@
                             "priority": 1010,
                             "direction": "Inbound"
                         }
-                    },
-                    {
-                        "name": "allow-ssh",
-                        "properties": {
-                            "protocol": "*",
-                            "sourcePortRange": "*",
-                            "destinationPortRange": "22",
-                            "sourceAddressPrefix": "167.220.0.0/16",
-                            "destinationAddressPrefix": "*",
-                            "access": "Allow",
-                            "priority": 1020,
-                            "direction": "Inbound"
-                        }
                     }
                 ]
             },
@@ -187,7 +176,7 @@
             "type": "Microsoft.Network/publicIPAddresses",
             "name": "[variables('publicIPAddress_ip_name')]",
             "apiVersion": "2016-03-30",
-            "location": "centralus",
+            "location": "[variables('location')]",
             "properties": {
                 "publicIPAllocationMethod": "Dynamic",
                 "idleTimeoutInMinutes": 4
@@ -199,7 +188,7 @@
             "type": "Microsoft.Network/virtualNetworks",
             "name": "[variables('virtualNetwork_name')]",
             "apiVersion": "2016-03-30",
-            "location": "centralus",
+            "location": "[variables('location')]",
             "properties": {
                 "addressSpace": {
                     "addressPrefixes": [
@@ -227,7 +216,7 @@
             "kind": "Storage",
             "name": "[variables('storageAccount1_name')]",
             "apiVersion": "2016-01-01",
-            "location": "centralus",
+            "location": "[variables('location')]",
             "tags": {},
             "properties": {},
             "dependsOn": []
@@ -242,10 +231,26 @@
             "kind": "Storage",
             "name": "[variables('storageAccount2_name')]",
             "apiVersion": "2016-01-01",
-            "location": "centralus",
+            "location": "[variables('location')]",
             "tags": {},
             "properties": {},
             "dependsOn": []
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "name": "[concat(variables('virtualMachine_name'),'/', variables('extensionName'))]",
+            "apiVersion": "2015-05-01-preview",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                "[concat('Microsoft.Compute/virtualMachines/', variables('virtualMachine_name'))]"
+            ],
+            "properties": {
+                "publisher": "Microsoft.Azure.Extensions",
+                "type": "DockerExtension",
+                "typeHandlerVersion": "1.0",
+                "autoUpgradeMinorVersion": true,
+                "settings": { }
+            }
         }
     ]
 }
