@@ -3,10 +3,12 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "prefix": {
-            "defaultValue": "",
-            "type": "string"
+            "type": "string",
+            "metadata": {
+                "description": "Prefix for all of the names of new resources"
+            }
         },
-        "adminUsername": {
+        "username": {
             "type": "string",
             "metadata": {
                 "description": "Admin username for connecting to VMs."
@@ -38,7 +40,8 @@
         "publicIPAddress_ip_name": "[concat(parameters('prefix'), '-publicIPAddress')]",
         "virtualNetwork_name": "[concat(parameters('prefix'), '-virtualNetwork')]",
         "storageAccount1_name": "[concat(parameters('prefix'), 'storage1')]",
-        "storageAccount2_name": "[concat(parameters('prefix'), 'storage2')]"
+        "storageAccount2_name": "[concat(parameters('prefix'), 'storage2')]",
+        "sshKeyPath": "[concat('/home/',parameters('username'),'/.ssh/authorized_keys')]"
     },
     "resources": [
         {
@@ -71,18 +74,18 @@
                 },
                 "osProfile": {
                     "computerName": "[variables('virtualMachine_name')]",
-                    "adminUsername": "[parameters('adminUsername')]",
+                    "adminUsername": "[parameters('username')]",
                     "linuxConfiguration": {
                         "disablePasswordAuthentication": true,
                         "ssh": {
                             "publicKeys": [
                                     {
-                                    "keyData": "[parameters('sshPublicKey')]"
+                                         "path": "[variables('sshKeyPath')]",
+                                        "keyData": "[parameters('sshPublicKey')]"
                                     }
                                 ]
                             }
-                    },
-                    "adminPassword": ""
+                    }
                 },
                 "networkProfile": {
                     "networkInterfaces": [
