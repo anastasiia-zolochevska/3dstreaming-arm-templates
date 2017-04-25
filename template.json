@@ -165,6 +165,19 @@
                             "priority": 1010,
                             "direction": "Inbound"
                         }
+                    },
+                    {
+                        "name": "AllowIn3000",
+                        "properties": {
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "3000",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 1020,
+                            "direction": "Inbound"
+                        }
                     }
                 ]
             },
