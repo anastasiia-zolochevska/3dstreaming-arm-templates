@@ -22,7 +22,7 @@
         }
     },
     "variables": {
-        "virtualMachine_name": "[concat(parameters('prefix'), '-turn-server-vm')]",
+        "virtualMachine_name": "[concat(parameters('prefix'), '-vm')]",
         "networkInterface_name": "[concat(parameters('prefix'), '-networkInterface')]",
         "networkSecurityGroup_nsg_name": "[concat(parameters('prefix'), '-SecurityGroups_nsg')]",
         "publicIPAddress_ip_name": "[concat(parameters('prefix'), '-publicIPAddress')]",
@@ -34,7 +34,6 @@
     },
     "resources": [
         {
-            "comments": "Generalized from resource: '/subscriptions/04f7ec88-8e28-41ed-8537-5e17766001f5/resourceGroups/3dstreaming-turn/providers/Microsoft.Compute/virtualMachines/3dstreaming-turn'.",
             "type": "Microsoft.Compute/virtualMachines",
             "name": "[variables('virtualMachine_name')]",
             "apiVersion": "2016-04-30-preview",
@@ -97,7 +96,6 @@
             ]
         },
         {
-            "comments": "Generalized from resource: '/subscriptions/04f7ec88-8e28-41ed-8537-5e17766001f5/resourceGroups/3dstreaming-turn/providers/Microsoft.Network/networkInterfaces/3dstreaming-turn659'.",
             "type": "Microsoft.Network/networkInterfaces",
             "name": "[variables('networkInterface_name')]",
             "apiVersion": "2016-03-30",
@@ -133,7 +131,6 @@
             ]
         },
         {
-            "comments": "Generalized from resource: '/subscriptions/04f7ec88-8e28-41ed-8537-5e17766001f5/resourceGroups/3dstreaming-turn/providers/Microsoft.Network/networkSecurityGroups/3dstreaming-turn-nsg'.",
             "type": "Microsoft.Network/networkSecurityGroups",
             "name": "[variables('networkSecurityGroup_nsg_name')]",
             "apiVersion": "2016-03-30",
@@ -184,7 +181,6 @@
             "dependsOn": []
         },
         {
-            "comments": "Generalized from resource: '/subscriptions/04f7ec88-8e28-41ed-8537-5e17766001f5/resourceGroups/3dstreaming-turn/providers/Microsoft.Network/publicIPAddresses/3dstreaming-turn-ip'.",
             "type": "Microsoft.Network/publicIPAddresses",
             "name": "[variables('publicIPAddress_ip_name')]",
             "apiVersion": "2016-03-30",
@@ -196,8 +192,7 @@
             "dependsOn": []
         },
         {
-            "comments": "Generalized from resource: '/subscriptions/04f7ec88-8e28-41ed-8537-5e17766001f5/resourceGroups/3dstreaming-turn/providers/Microsoft.Network/virtualNetworks/3dstreaming-turn'.",
-            "type": "Microsoft.Network/virtualNetworks",
+           "type": "Microsoft.Network/virtualNetworks",
             "name": "[variables('virtualNetwork_name')]",
             "apiVersion": "2016-03-30",
             "location": "[variables('location')]",
@@ -219,7 +214,6 @@
             "dependsOn": []
         },
         {
-            "comments": "Generalized from resource: '/subscriptions/04f7ec88-8e28-41ed-8537-5e17766001f5/resourceGroups/3dstreaming-turn/providers/Microsoft.Storage/storageAccounts/3dstreamingturndiag747'.",
             "type": "Microsoft.Storage/storageAccounts",
             "sku": {
                 "name": "Standard_LRS",
@@ -234,7 +228,6 @@
             "dependsOn": []
         },
         {
-            "comments": "Generalized from resource: '/subscriptions/04f7ec88-8e28-41ed-8537-5e17766001f5/resourceGroups/3dstreaming-turn/providers/Microsoft.Storage/storageAccounts/3dstreamingturndisks541'.",
             "type": "Microsoft.Storage/storageAccounts",
             "sku": {
                 "name": "Premium_LRS",
