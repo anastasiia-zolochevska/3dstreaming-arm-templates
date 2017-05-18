@@ -1,0 +1,190 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+
+         "prefix": {
+            "type": "string",
+            "metadata": {
+                "description": "Prefix for all of the names of new resources"
+            }
+        }
+    },
+     "variables": {
+        "disk_name": "[concat(parameters('prefix'), '-disk')]",
+        "vm_name": "[concat(parameters('prefix'), '-vm')]",
+        "networkInterfaces_name": "[concat(parameters('prefix'), '-networkInterfaces')]",
+        "virtualNetwork_name": "[concat(parameters('prefix'), '-virtualNetwork')]",
+        "networkSecurityGroups_name": "[concat(parameters('prefix'), '-networkSecurityGroups')]",
+        "publicIPAddresses_name": "[concat(parameters('prefix'), '-publicIPAddresses')]",
+        "storageAccounts_name": "[concat('s', parameters('prefix'))]",
+        "location": "southcentralus"
+    },
+    "resources": [
+        {
+            "comments": "Generalized from resource: '/subscriptions/04f7ec88-8e28-41ed-8537-5e17766001f5/resourceGroups/anzoloch3d3/providers/Microsoft.Compute/disks/anzoloch3d3_OsDisk_1_dc281c1b41124ffeb6a9da5f27719736'.",
+            "type": "Microsoft.Compute/disks",
+            "name": "[variables('disk_name')]",
+            "apiVersion": "2016-04-30-preview",
+            "location": "[variables('location')]",
+            "properties": {
+                "accountType": "Standard_LRS",
+                "osType": "Windows",
+                "creationData": {
+                    "createOption": "FromImage",
+                    "imageReference": {
+                        "id": "/Subscriptions/04f7ec88-8e28-41ed-8537-5e17766001f5/Providers/Microsoft.Compute/Locations/southcentralus/Publishers/MicrosoftWindowsServer/ArtifactTypes/VMImage/Offers/WindowsServer/Skus/2016-Datacenter-with-Containers/Versions/latest"
+                    }
+                },
+                "diskSizeGB": 128
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/04f7ec88-8e28-41ed-8537-5e17766001f5/resourceGroups/anzoloch3d3/providers/Microsoft.Compute/virtualMachines/anzoloch3d3'.",
+            "type": "Microsoft.Compute/virtualMachines",
+            "name": "[variables('vm_name')]",
+            "apiVersion": "2016-04-30-preview",
+            "location": "[variables('location')]",
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "Standard_D1_v2"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "MicrosoftWindowsServer",
+                        "offer": "WindowsServer",
+                        "sku": "2016-Datacenter-with-Containers",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "osType": "Windows",
+                        "name": "[concat(variables('vm_name'),'_OsDisk_1_dc281c1b41124ffeb6a9da5f27719736')]",
+                        "createOption": "FromImage",
+                        "caching": "ReadWrite",
+                        "managedDisk": {
+                            "storageAccountType": "Standard_LRS",
+                            "id": "[resourceId('Microsoft.Compute/disks', variables('disk_name'))]"
+                        },
+                        "diskSizeGB": 128
+                    },
+                    "dataDisks": []
+                },
+                "osProfile": {
+                    "computerName": "[variables('vm_name')]",
+                    "adminUsername": "anzoloch",
+                    "windowsConfiguration": {
+                        "provisionVMAgent": true,
+                        "enableAutomaticUpdates": true
+                    },
+                    "secrets": []
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('networkInterfaces_name'))]"
+                        }
+                    ]
+                },
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": true,
+                        "storageUri": "[concat('https', '://', variables('storageAccounts_name'), '.blob.core.windows.net', '/')]"
+                    }
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Compute/disks', variables('disk_name'))]",
+                "[resourceId('Microsoft.Network/networkInterfaces', variables('networkInterfaces_name'))]",
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/04f7ec88-8e28-41ed-8537-5e17766001f5/resourceGroups/anzoloch3d3/providers/Microsoft.Network/networkInterfaces/anzoloch3d3699'.",
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "[variables('networkInterfaces_name')]",
+            "apiVersion": "2017-03-01",
+            "location": "[variables('location')]",
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "privateIPAddress": "10.10.10.8",
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPAddresses_name'))]"
+                            },
+                            "subnet": {
+                                "id": "[concat(resourceId('Microsoft.Network/virtualNetworks', variables('virtualNetwork_name')), '/subnets/default')]"
+                            }
+                        }
+                    }
+                ],
+                "dnsSettings": {
+                    "dnsServers": []
+                },
+                "enableIPForwarding": false,
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroups_name'))]"
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPAddresses_name'))]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroups_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/04f7ec88-8e28-41ed-8537-5e17766001f5/resourceGroups/anzoloch3d3/providers/Microsoft.Network/networkSecurityGroups/anzoloch3d3-nsg'.",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "name": "[variables('networkSecurityGroups_name')]",
+            "apiVersion": "2017-03-01",
+            "location": "[variables('location')]",
+            "properties": {
+                "securityRules": [
+                    {
+                        "name": "default-allow-rdp",
+                        "properties": {
+                            "protocol": "TCP",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "3389",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 1000,
+                            "direction": "Inbound"
+                        }
+                    }
+                ]
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/04f7ec88-8e28-41ed-8537-5e17766001f5/resourceGroups/anzoloch3d3/providers/Microsoft.Network/publicIPAddresses/anzoloch3d3-ip'.",
+            "type": "Microsoft.Network/publicIPAddresses",
+            "name": "[variables('publicIPAddresses_name')]",
+            "apiVersion": "2017-03-01",
+            "location": "[variables('location')]",
+            "properties": {
+                "publicIPAllocationMethod": "Dynamic",
+                "idleTimeoutInMinutes": 4
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/04f7ec88-8e28-41ed-8537-5e17766001f5/resourceGroups/anzoloch3d3/providers/Microsoft.Storage/storageAccounts/anzoloch3d3diag836'.",
+            "type": "Microsoft.Storage/storageAccounts",
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "kind": "Storage",
+            "name": "[variables('storageAccounts_name')]",
+            "apiVersion": "2016-01-01",
+            "location": "[variables('location')]",
+            "tags": {},
+            "properties": {},
+            "dependsOn": []
+        }
+    ]
+}
