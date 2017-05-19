@@ -1,7 +1,5 @@
-Param(
-  [string]$BinariesZipPath,
-  [string]$RelativePathToServerExe
-)
+$BinariesZipPath = "https://3dtoolkitstorage.blob.core.windows.net/releases/14480-Streaming-Win32-Release.zip" 
+$RelativePathToServerExe='\Win32-Release\SpinningCube\SpinningCube_Server_NoUI.exe'
 
 $DestinationFolder = "C:\3Dtoolkit"
 $BinariesFolder = $DestinationFolder+'\binaries'+ (Get-Date -UFormat "%M%S")
