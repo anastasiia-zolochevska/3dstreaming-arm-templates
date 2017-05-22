@@ -2,6 +2,7 @@ $BinariesZipPath = "https://3dtoolkitstorage.blob.core.windows.net/releases/1448
 $RelativePathToServerExe='\Win32-Release\SpinningCube\SpinningCube_Server_NoUI.exe'
 
 $DestinationFolder = "C:\3Dtoolkit"
+mkdir $DestinationFolder
 $BinariesFolder = $DestinationFolder+'\binaries'+ (Get-Date -UFormat "%M%S")
 $BinariesZip=$BinariesFolder+'.zip'
 $PathToExecutable = $BinariesFolder+$RelativePathToServerExe
