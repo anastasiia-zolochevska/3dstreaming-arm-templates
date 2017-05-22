@@ -242,7 +242,7 @@
                     "fileUris": [
                         "https://raw.githubusercontent.com/anastasiia-zolochevska/3dstreaming-arm-templates/master/start-rendering-server.ps1"
                     ],
-                    "commandToExecute": "powershell.exe -ExecutionPolicy Unrestricted -File start-rendering-server.ps1"
+                    "commandToExecute": "powershell.exe -ExecutionPolicy Unrestricted -File start-rendering-server.ps1 [parameters('pathToBinariesZip')] [parameters('relativePathToExecutable')]"
                 }
             },
             "dependsOn": [
