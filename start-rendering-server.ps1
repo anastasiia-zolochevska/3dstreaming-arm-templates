@@ -1,5 +1,10 @@
-$BinariesZipPath = "https://3dtoolkitstorage.blob.core.windows.net/releases/14480-Streaming-Win32-Release.zip" 
-$RelativePathToServerExe='\Win32-Release\SpinningCube\SpinningCube_Server_NoUI.exe'
+Param(
+  [string]$BinariesZipPath,
+  [string]$RelativePathToServerExe
+)
+
+$BinariesZipPath
+$RelativePathToServerExe
 
 $DestinationFolder = "C:\3Dtoolkit"
 mkdir $DestinationFolder
@@ -16,4 +21,8 @@ Add-Type -A System.IO.Compression.FileSystem
 
 cd (Split-Path -Path $PathToExecutable)
 
+Get-Process SpinningCube_Server_NoUI
+
 & ('.\'+(Split-Path -Path $PathToExecutable -Leaf))
+
+Get-Process SpinningCube_Server_NoUI
