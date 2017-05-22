@@ -41,7 +41,6 @@
         "networkSecurityGroups_name": "[concat(parameters('prefix'), '-networkSecurityGroups')]",
         "publicIPAddresses_name": "[concat(parameters('prefix'), '-publicIPAddresses')]",
         "storageAccounts_name": "[concat('s', parameters('prefix'))]",
-        "scriptUrl": "https://raw.githubusercontent.com/anastasiia-zolochevska/3dstreaming-arm-templates/master/start-rendering-server.ps1",
         "location": "southcentralus"
     },
 
@@ -76,7 +75,7 @@
                 "storageProfile": {
                     "imageReference": {
                         "publisher": "MicrosoftWindowsServer",
-                        "offer": "WindowsServer",
+                        "offer": "WindowsServer"
                         "sku": "2016-Datacenter",
                         "version": "latest"
                     },
@@ -86,8 +85,7 @@
                         "createOption": "FromImage",
                         "caching": "ReadWrite",
                         "managedDisk": {
-                            "storageAccountType": "Standard_LRS",
-                            "id": "[resourceId('Microsoft.Compute/disks', variables('disk_name'))]"
+                            "storageAccountType": "Standard_LRS"
                         },
                         "diskSizeGB": 128
                     },
@@ -236,15 +234,15 @@
             "apiVersion": "2016-03-30",
             "location": "[variables('location')]",
             "properties": {
-                "publisher": "Microsoft.Azure.Extensions",
-                "type": "CustomScript",
-                "typeHandlerVersion": "2.0",
-                "autoUpgradeMinorVersion": true,
-                "settings": {
+                 "publisher": "Microsoft.Compute",
+                 "type": "CustomScriptExtension",
+                 "typeHandlerVersion": "1.3",
+                 "autoUpgradeMinorVersion": "true",
+                 "settings": {
                     "fileUris": [
-                        "[variables('scriptUri')]"
+                        "https://raw.githubusercontent.com/anastasiia-zolochevska/3dstreaming-arm-templates/master/start-rendering-server.ps1"
                     ],
-                "commandToExecute": "powershell start-rendering-server.ps1 -BinariesZipPath variables('pathToBinariesZip') -RelativePathToServerExe variables('relativePathToExecutable')"
+                    "commandToExecute": "powershell.exe -ExecutionPolicy Unrestricted -File start-rendering-server.ps1"
                 }
             },
             "dependsOn": [
