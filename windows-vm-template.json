@@ -20,16 +20,13 @@
                 "description": "Admin password to connect to VM."
             }
         },
-        "pathToBinariesZip": {
-            "type": "string",
-            "metadata": {
-                "description": "Path to publicly accessable binaries archive"
-            }
+        "scriptUri": {
+            "type": "string"
         },
-        "relativePathToExecutable": {
+        "scriptCommand": {
             "type": "string",
             "metadata": {
-                "description": "Relative path to executable"
+                "description": "Script command"
             }
         }
     },
@@ -240,9 +237,9 @@
                  "autoUpgradeMinorVersion": "true",
                  "settings": {
                     "fileUris": [
-                        "https://raw.githubusercontent.com/anastasiia-zolochevska/3dstreaming-arm-templates/master/start-rendering-server.ps1"
+                         "[parameters('scriptUri')]"
                     ],
-                    "commandToExecute": "powershell.exe -ExecutionPolicy Unrestricted -File start-rendering-server.ps1 [parameters('pathToBinariesZip')] [parameters('relativePathToExecutable')]"
+                    "commandToExecute": "[parameters('scriptCommand')]"
                 }
             },
             "dependsOn": [
